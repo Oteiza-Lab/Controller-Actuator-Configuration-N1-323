@@ -1,14 +1,15 @@
 # Controller-Actuator-Configuration-N1-323
 Controller Actuator Configuration for Studying Fish Behavior in Currents
 
-README
+## README
 **CAREFULLY REVIEW THIS DOCUMENTATION BEFORE ACTUATOR USE TO ENSURE PROPER HANDLING OF THE EQUIPMENT**
 
 Oteiza Lab Controller-Actuator Configuration
 Last Updated 03/07/2024 - Daniel Durst
 
 ---------------------------------------------
-OVERVIEW
+
+## OVERVIEW
 
 This README contains information on the Oteiza Lab Controller-Actuator Configuration, including proper use and issue fix information. If you are to improve the code, include
 additional functionality in this README, then update the date and name for documentation purposes.
@@ -28,56 +29,74 @@ The actuator is not used to its full power (set currently to 1/20th of its power
 for this lab. If you are requiring a higher velocity, minimize the scale_factor GRADUALLY. The limitations of the scale factor are found at .000318, but we note 1 do NOT reach this limit
 and 2 the motor acts much differently with this scale factor. If at any point, the code is to have funcitonality added or changed, refer to the manuals on the controller and actuator: 
 https://copleycontrols.com/wp-content/uploads/2018/02/Accelnet_Micro_Panel_CANopen-ACJ-Datasheet-Datasheet.pdf & http://www.servovision.com/copley/download/STA11.pdf respectively.
----------------------------------------------
 
 ---------------------------------------------
-CURRENT ACTUATOR CAPABILITIES & IMPORTANT NOTES
+
+## CURRENT ACTUATOR CAPABILITIES & IMPORTANT NOTES
 
     VELOCITY: .275 m/s ~ 864 Units
-    ACCELERATION / DECELERATION: .625 m/s^2 ~ 100 Units **Calculated based off tested values for velocity and using same scale_factor (could be off)
+    ACCELERATION / DECELERATION: .625 m/s^2 ~ 100 Units (Calculated based off tested values for velocity and could be off)
     SCALE FACTOR BEING USED: .00625 (~5% of capability)
 
-    ** IMPORTANT **
-    - The acceleration / deceleration values practically stop the rod/piston instantaneously at 100 Units at the current available max speed (.275 m/s = 864 Units).
+### IMPORTANT
+    - The acceleration / deceleration values practically stop the rod/piston instantaneously at 100 Units at
+    the current available max speed (.275 m/s = 864 Units).
     - To actually notice the acceleration / deceleration, utilize values <40.
-    - The script currently does not anticipate the boundaries, only realizing to turn around when it has detected it is past it. THEREFORE, you must anticipate the deceleration rate
-    you are using and understand that the rod/piston will overshoot the boundary you have set. This is why it is important to start the rod/piston at 0, having space to overshoot on the 
-    (-) side of the tube and not cause issues with the rod/piston exiting the tube.
-    ** IMPORTANT **
+    - The script currently does not anticipate the boundaries, only realizing to turn around when it has detected
+    it is past it. THEREFORE, you must anticipate the deceleration rate you are using and understand that the rod/piston
+    will overshoot the boundary you have set. This is why it is important to start the rod/piston at 0, having space to 
+    overshoot on the (-) side of the tube and not cause issues with the rod/piston exiting the tube.
 
-MAX ACTUATOR CAPABILITIES **Difficult to find exact metrics due to high capability of actuator and risk of short circuit
+## MAX ACTUATOR CAPABILITIES
 
     VELOCITY: 5.4 m/s ~ 17000 Units (calculated off of trial and error)
-    ACCELERATION / DECELERATION: 378 m/s^2 ~ 1,190,397 Units **Again calculated based off velocity since we cannot test acc/dec limits easily (could be off)
+    ACCELERATION / DECELERATION: 378 m/s^2 ~ 1,190,397 Units (Calculated based off velocity, we cannot test acc/dec limits well)
+    SCALE_FACTOR BEING USED = .000318
+    - Difficult to find exact metrics due to high capability of actuator and risk of short circuit
+    
 ---------------------------------------------
 
 ---------------------------------------------
-STEPS TO RUN ACTUATOR PROPERLY
+
+## STEPS TO RUN ACTUATOR PROPERLY
 
 1 Set the metal rod in the actuator with the piston attached to the end.
+
 2 Place the piston in the transparent tubing.
+
 3 **ALWAYS Align the black line on the piston head with the line labelled 0 (advised) before running the actuator.**
-4 If you find yourself in the wrong directory, follow these steps in the terminal window
- (replace daniel.durst with personal account name). Otherwise move to step 5:
+
+4 If you find yourself in the wrong directory, follow these steps in the terminal window (replace daniel.durst with personal account name). Otherwise move to step 5:
+
     PS C:\Users\daniel.durst\Downloads\Actuator_OteizaLab> cd /
     PS C:\> cd Users
     PS C:\Users> cd daniel.durst
     PS C:\Users\daniel.durst> cd Downloads
     PS C:\Users\daniel.durst\Downloads> cd Actuator_OteizaLab
+    
 5 Run Commands:
+
     1 Running the file alone:
+    
         PS C:\Users\daniel.durst\Downloads\Actuator_OteizaLab> python motor.py
         ___ (follow prompts: 5)
         ___ (output, enable drive)
+        
     2 Running the file with parameters [VELOCITY] [ACCELERATION] [DECELERATION] [TIME] [DELTA]:
+    
         PS C:\Users\daniel.durst\Downloads\Actuator_OteizaLab> python motor.py 100 10 10 15 150
         ___ (output, enable drive)
+        
     3 Running the file with parameters and flags [-v][VELOCITY] [-a][ACCELERATION] [-d][DECELERATION] [-t][TIME] [-dist][DELTA]:
+    
         PS C:\Users\daniel.durst\Downloads\Actuator_OteizaLab> python motor.py -v 3 -a 10 -d 10 -t 15 -dist 150
         ___ (output, enable drive)
+        
     - Method (2) requires precise ordering of specified parameters. Method (3)'s ordering is insignificant as long as the flag is provided before the value.
     - If the parameters in methods (2) and (3) are incomplete, the script will default to method (1) and run the 5 prompts for value specification.
-6 **IF AT ANY TIME THE ACTUATOR MUST BE STOPPED IMMEDIATELY:
+    
+6 **IF AT ANY TIME THE ACTUATOR MUST BE STOPPED IMMEDIATELY:**
+
     1 Hold down CTRL + C:
         INFO:root: Motor position: -320.12500
         INFO:root: Motor position: -316.30000
@@ -86,12 +105,14 @@ STEPS TO RUN ACTUATOR PROPERLY
         INFO:root: Disabling drive.
         INFO:root: Drive disabled successfully.
     2 Reset rod/piston positioning and ensure safety of hardware.
+    
 ---------------------------------------------
 
 ---------------------------------------------
-IMPORTANT CONSIDERATIONS FOR PROPER ACTUATOR FUNCTIONALITY AND ISSUE FIXES
 
-1 Actuator Enabled, Positioning Stagnanat, Event Register 40e000:
+## IMPORTANT CONSIDERATIONS FOR PROPER ACTUATOR FUNCTIONALITY AND ISSUE FIXES
+
+### 1 Actuator Enabled, Positioning Stagnanat, Event Register 40e000:
     PS C:\Users\daniel.durst\Downloads\Actuator_OteizaLab> python motor.py -v 300 -a 10 -d 10 -dist 150 -t 15
     ELOCITY set to: 0.095 m/s (300.000 Units)
     ACCELERATION set to: 0.062 m/s2 (10.000 Units)
@@ -147,7 +168,7 @@ IMPORTANT CONSIDERATIONS FOR PROPER ACTUATOR FUNCTIONALITY AND ISSUE FIXES
     6 Close CME (opening COM3 port for actuator use)
     7 Run Commands and Check Functionality
 
-2 Position Stagnanat, Event Register e3:
+### 2 Position Stagnanat, Event Register e3:
     PS C:\Users\daniel.durst\Downloads\Actuator_OteizaLab> python motor.py 400 10 10 15 150
     VELOCITY set to: 0.127 m/s (400.000 Units)
     ACCELERATION set to: 0.062 m/s2 (10.000 Units)
@@ -183,7 +204,7 @@ IMPORTANT CONSIDERATIONS FOR PROPER ACTUATOR FUNCTIONALITY AND ISSUE FIXES
     5 If e3 error still there, contact help due to potential short circuit damage
         
 
-3 PISTON OVERSHOOTS DESIRED +DELTA AT HIGH SPEEDS
+### 3 PISTON OVERSHOOTS DESIRED +DELTA AT HIGH SPEEDS
     1 This is normal due to several factors:
         - Communication Delays: The controller sends the actuator a signal to reverse the direction when the boundary is reached.
         This signal, however, takes time to send and be received, and therefore this delay is more pronounced at higher speeds, leading
@@ -195,7 +216,7 @@ IMPORTANT CONSIDERATIONS FOR PROPER ACTUATOR FUNCTIONALITY AND ISSUE FIXES
         - Implement a PID Controller to handle dynamic delay.
         - Adjust acceleration / deceleration profile to reduce momentum at boundaries.
 
-4 "FAILED TO DISABLE DRIVE" IN TERMINAL
+### 4 "FAILED TO DISABLE DRIVE" IN TERMINAL
     1 The commands CTRL + C will disable the drive and stop the motion of the rod/piston
         - Since the actuator is in the process of disabling the drive (it is not instantaneous) while looking for an exception e,
         it might throw out this message.
