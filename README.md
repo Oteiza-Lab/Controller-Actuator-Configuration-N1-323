@@ -5,14 +5,13 @@ Controller Actuator Configuration for Studying Fish Behavior in Currents
 **CAREFULLY REVIEW THIS DOCUMENTATION BEFORE ACTUATOR USE TO ENSURE PROPER HANDLING OF THE EQUIPMENT**
 
 Oteiza Lab Controller-Actuator Configuration
-Last Updated 03/07/2024 - Daniel Durst
+Last Updated 16/07/2024 - Daniel Durst
 
 ---------------------------------------------
 
 ## OVERVIEW
 
-This README contains information on the Oteiza Lab Controller-Actuator Configuration, including proper use and issue fix information. If you are to improve the code, include
-additional functionality in this README, then update the date and name for documentation purposes.
+This README contains information on the Oteiza Lab Controller-Actuator Configuration, including proper use and issue fix information. If you are to improve the code, include additional functionality in this README, then update the date and name for documentation purposes.
 
 The purpose of this setup is to create a current with which to study fish behavior. The actuator holds a metal rod with a piston head that creates the current in the transparent
 piping.
